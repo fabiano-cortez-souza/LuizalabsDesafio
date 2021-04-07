@@ -1,0 +1,42 @@
+server:
+  port: 8089
+  servlet:
+    context-path: /
+app:
+  version: "0.0.1"
+
+## SWAGGER
+#springfox:
+#  documentation:
+#    swagger:
+#      v2:
+#        path: /api-docs  
+
+# Time cache 
+my:
+  fixed: 
+    delay:
+      prop: 5000
+
+endpoints:
+  doc: error_codes.html
+
+# SPRING DATA
+
+## PROMETHEUS
+management:
+  server:
+    port: 8090
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health
+  endpoint:
+    metrics:
+      enabled: false
+    prometheus:
+      enabled: true
