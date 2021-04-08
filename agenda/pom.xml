@@ -13,11 +13,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>agenda</name>
 	<description>Desafio Luzia Labs - Microserviços</description>
-	<properties>
+	
+    <properties>
+        <preAssembleDir>${project.build.directory}/appassembler-preassemble</preAssembleDir>    
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.a>${java.version}</maven.compiler.a>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-boot.repackage.skip>false</spring-boot.repackage.skip>
+        <docker.image.prefix>agenda</docker.image.prefix>    
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-		<java.version>1.8</java.version>
-        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
-        <dockerfile.build.skip>true</dockerfile.build.skip>
+ 
         <sonar.exclusions>
             /src/main/java/br/com/luzialabs/desafio/agenda/abstractions/kafka/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/connector/*,
@@ -106,6 +113,11 @@
             <version>20160212</version>
         </dependency>
         <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>        
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             </dependency>
@@ -114,16 +126,144 @@
             <artifactId>powermock-api-mockito2</artifactId>
             <version>2.0.0-beta.5</version>
             <scope>test</scope>
-        </dependency>       
+        </dependency>    
+<!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
+<dependency>
+    <groupId>org.powermock</groupId>
+    <artifactId>powermock-module-junit4</artifactId>
+    <version>2.0.9</version>
+    <scope>test</scope>
+</dependency>           
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Incorpora Dependencia no target -->
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.2</version>
+                    <executions>
+                        <execution>
+                            <id>copy-credential-1</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>target</outputDirectory>
+                                <overwrite>true</overwrite>
+                                <resources>
+                                    <resource> 
+                                        <directory>../agenda/src/main/resources/</directory>
+                                        <filtering>true</filtering>
+                                        <includes>
+                                            <include>Dockerfile</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>copy-credential-2</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${preAssembleDir}/credential</outputDirectory>
+                                <overwrite>true</overwrite>
+                                <resources>
+                                    <resource>
+                                        <directory>../agenda/src/main/resources/</directory>
+                                        <filtering>true</filtering>
+                                        <includes>
+                                            <include>*.json</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>2.3.0.RELEASE</version>
+                    <inherited>false</inherited>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <inherited>false</inherited>
+                    <configuration>
+                        <contextDirectory>target</contextDirectory>
+                        <dockerFile>Dockerfile</dockerFile>
+                        <repository>${docker.image.prefix}/agenda-app</repository>
+                        <buildArgs>
+                            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>3.0.0-M3</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.8.2</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.velocity</groupId>
+                            <artifactId>velocity</artifactId>
+                            <version>1.5</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.0.0-M3</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.0.0</version>
+                <reportSets>
+                    <reportSet>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>
