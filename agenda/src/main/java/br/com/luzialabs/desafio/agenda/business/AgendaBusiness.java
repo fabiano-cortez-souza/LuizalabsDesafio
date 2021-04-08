@@ -16,7 +16,7 @@ import br.com.luzialabs.desafio.agenda.enums.ComunicacaoTipoEnum;
 import br.com.luzialabs.desafio.agenda.enums.ErrorType;
 import br.com.luzialabs.desafio.agenda.enums.StatusEnvioEnum;
 import br.com.luzialabs.desafio.agenda.enums.SuccessMessage;
-import br.com.luzialabs.desafio.agenda.exceptions.AgendaApiResponse;
+import br.com.luzialabs.desafio.agenda.http.AgendaApiResponse;
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
 import br.com.luzialabs.desafio.agenda.service.AgendaService;
 import br.com.luzialabs.desafio.agenda.utils.DateUtils;

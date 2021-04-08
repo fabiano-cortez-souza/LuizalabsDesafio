@@ -1,4 +1,4 @@
-package br.com.luzialabs.desafio.agenda.vo;
+package br.com.luzialabs.desafio.agenda.http;
 
 import java.io.Serializable;
 

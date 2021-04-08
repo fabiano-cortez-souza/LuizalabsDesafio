@@ -1,8 +1,6 @@
 package br.com.luzialabs.desafio.agenda.utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -12,8 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import br.com.luzialabs.desafio.agenda.vo.OCSMember;
 
 public final class JsonUtils {
 	
@@ -61,23 +57,9 @@ public final class JsonUtils {
 	                Object fieldInJsonFormat = JsonUtils.addRootName(fieldType,fieldValue);
 	                fieldTypeValue.put(fieldName, fieldInJsonFormat);
 	            }
-
 	        }
 		}
 		return fieldTypeValue;
 	}
 
-	public static List<OCSMember> createMembersFromHashMap(HashMap<String, Object> fieldsWithTypeValueString) {
-		List<OCSMember> ocsMembers = new ArrayList<OCSMember>();
-		
-		for(String fieldName : fieldsWithTypeValueString.keySet()) {
-			
-		    OCSMember member = new OCSMember();
-			member.setName(fieldName);
-			member.setValue(fieldsWithTypeValueString.get(fieldName));
-			ocsMembers.add(member);
-		}
-		
-		return ocsMembers;
-	}
 }

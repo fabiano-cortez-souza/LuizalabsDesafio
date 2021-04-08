@@ -1,4 +1,4 @@
-package br.com.luzialabs.desafio.agenda.exceptions;
+package br.com.luzialabs.desafio.agenda.http;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import br.com.luzialabs.desafio.agenda.enums.ErrorType;
 import br.com.luzialabs.desafio.agenda.enums.SuccessMessage;
-import br.com.luzialabs.desafio.agenda.exceptions.ApiResponse;
 import br.com.luzialabs.desafio.agenda.vo.AgendaVO;
 
 public class AgendaApiResponse extends ApiResponse {

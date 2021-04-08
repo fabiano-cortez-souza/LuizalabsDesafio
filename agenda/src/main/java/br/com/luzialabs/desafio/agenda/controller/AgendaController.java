@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.luzialabs.desafio.agenda.business.AgendaBusiness;
 import br.com.luzialabs.desafio.agenda.dto.AgendaDTO;
 import br.com.luzialabs.desafio.agenda.enums.StatusEnvioEnum;
-import br.com.luzialabs.desafio.agenda.exceptions.AgendaApiResponse;
+import br.com.luzialabs.desafio.agenda.http.AgendaApiResponse;
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
 import br.com.luzialabs.desafio.agenda.utils.JsonUtils;
 

@@ -1,4 +1,4 @@
-package br.com.luzialabs.desafio.agenda.exceptions;
+package br.com.luzialabs.desafio.agenda.http;
 
 import java.time.ZonedDateTime;
 
@@ -15,7 +15,6 @@ import br.com.luzialabs.desafio.agenda.enums.ErrorType;
 import br.com.luzialabs.desafio.agenda.enums.SuccessMessage;
 import br.com.luzialabs.desafio.agenda.utils.JsonUtils;
 import br.com.luzialabs.desafio.agenda.utils.Utils;
-import br.com.luzialabs.desafio.agenda.vo.HttpStatusReference;
 
 public class ApiResponse {
 

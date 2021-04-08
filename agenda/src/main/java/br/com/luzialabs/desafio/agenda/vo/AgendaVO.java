@@ -4,105 +4,98 @@ import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AgendaVO { //extends PubSubTopicObject{
+import br.com.luzialabs.desafio.agenda.utils.JsonUtils;
+
+public class AgendaVO { 
 
 	private static final long serialVersionUID = 1L;
     
-	@JsonProperty("timestamp")
-	private String timestamp = null;
+    @Id
+    @JsonProperty("id")
+    private long id;
 
-	
-	@JsonProperty("msisdn")
-	private String msisdn = null;
+    @JsonProperty("dataHora")
+    private String dataHora;
 
-	@JsonProperty("type")
-	private String type = null;
+    @JsonProperty("destinatario")
+    private String destinatario;
 
-	@JsonProperty("amount")
-	private String amount = null;
-
-	@JsonProperty("description")
-	private String description = null;
-
-	@Id
-	@JsonProperty("transactionID")
-	private String transactionID = null;
+    @JsonProperty("mensagem")
+    private String mensagem;    
+    
+    @JsonProperty("comunicacaoTipo")
+    private String comunicacaoTipo;
+    
+    @JsonProperty("statusEnvio")
+    private String statusEnvio; 
 	
 	public AgendaVO() {}
 	
-	public AgendaVO(String timestamp,
-								String msisdn,
-								String type,
-								String amount,
-								String description,
-								String transactionID) {
+	public AgendaVO(long id,
+					String dataHora,
+					String destinatario,
+					String mensagem,
+					String comunicacaoTipo,
+					String statusEnvio) {
 		
-		this.timestamp = timestamp;
-		this.msisdn = msisdn;
-		this.type = type;
-		this.amount = amount;
-		this.description = description;
-		this.transactionID = transactionID;
+	    this.id = id;
+	    this.dataHora = dataHora;
+	    this.destinatario = destinatario;
+	    this.mensagem = mensagem;    
+	    this.comunicacaoTipo = comunicacaoTipo;
+	    this.statusEnvio = statusEnvio; 	
 	}
 	
-	public AgendaVO(String timestamp,
-								String msisdn,
-								String type,
-								String amount,
-								String transactionID) {
+    @Override
+    public String toString() {
+        return JsonUtils.parseToJsonString(this);
+    }	
 
-		this.timestamp = timestamp;
-		this.msisdn = msisdn;
-		this.type = type;
-		this.amount = amount;
-		this.transactionID = transactionID;
-	}
-	
-	public String getTimestamp() {
-		return timestamp;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public String getMsisdn() {
-		return msisdn;
-	}
+    public String getDataHora() {
+        return dataHora;
+    }
 
-	public void setMsisdn(String msisdn) {
-		this.msisdn = msisdn;
-	}
+    public void setDataHora(String dataHora) {
+        this.dataHora = dataHora;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getDestinatario() {
+        return destinatario;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
+    }
 
-	public String getAmount() {
-		return amount;
-	}
+    public String getMensagem() {
+        return mensagem;
+    }
 
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getComunicacaoTipo() {
+        return comunicacaoTipo;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setComunicacaoTipo(String comunicacaoTipo) {
+        this.comunicacaoTipo = comunicacaoTipo;
+    }
 
-	public String getTransactionID() {
-		return transactionID;
-	}
+    public String getStatusEnvio() {
+        return statusEnvio;
+    }
 
-	public void setTransactionID(String transactionID) {
-		this.transactionID = transactionID;
-	}
+    public void setStatusEnvio(String statusEnvio) {
+        this.statusEnvio = statusEnvio;
+    }
 }

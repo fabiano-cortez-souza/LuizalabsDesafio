@@ -1,4 +1,4 @@
-package br.com.luzialabs.desafio.agenda.connector;
+package br.com.luzialabs.desafio.agenda.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.luzialabs.desafio.agenda.enums.ErrorType;
-import br.com.luzialabs.desafio.agenda.exceptions.ApiResponse;
 
 @Component
 public class HttpRequest {
