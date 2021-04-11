@@ -39,7 +39,7 @@ public class AgendaModel {
     }
 
     public AgendaModel(String datahora, String destinatario, String mensagem) {
-        this.dataHora = datahora; //DateUtils.timestampValidation(datahora);
+        this.dataHora = datahora; 
         this.destinatario = destinatario;
         this.mensagem = mensagem;
     }

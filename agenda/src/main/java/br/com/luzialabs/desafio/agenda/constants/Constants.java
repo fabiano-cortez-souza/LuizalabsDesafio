@@ -1,6 +1,7 @@
 package br.com.luzialabs.desafio.agenda.constants;
 
 public final class Constants {
+            
     public static final String TIME_ZONE_ID = "UTC";
     public static final String TIMESTAMP_FORMAT = "yyyMMdd'T'HH:mm:ssZ";
     public static final String DATE_FORMAT = "yyyMMdd";
@@ -10,4 +11,5 @@ public final class Constants {
     public static final int MAX_PAGE_LENGTH = 100;
     public static final int MAX_REPROCESS_TRY_VALUE = 3;
     public static final int MAX_LENGTH_MESSAGE = 4096;
+  
 }

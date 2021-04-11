@@ -4,9 +4,7 @@ O desafio consiste na implementação de microserviço de agendamento, sendo
  - Endpoint de Consulta do agendamento;
  - Endpoint de Remoção do agendamento.
 
-Visando evitar indisponibilidade de todas as funcionalidades, seja em decorrecia de manutenção ou evolução, para cada endpoint do microserviço, teremos um Docker para atender a requisição, com responsabilidade.
-
-Em relação as integrações para as possíveis comunicações, que podem ser enviadas são: email, sms, push e whatsapp, irei presumir que estes são outros microserviçõs, com seus respsctivos endpoints, mas irei implementar poc para estes também.
+Em relação as integrações para as possíveis comunicações, que podem ser enviadas são: email, sms, push e whatsapp, irei presumir que estes são outros microserviçõs, com seus respsctivos endpoints, mas irei implementar mock para estes também.
  - Endpoint envio Agendamento email
  - Endpoint envio Agendamento sms
  - Endpoint envio Agendamento push

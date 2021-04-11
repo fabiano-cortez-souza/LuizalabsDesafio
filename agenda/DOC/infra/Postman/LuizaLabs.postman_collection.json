@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "676d4018-13d2-4319-8857-f3626a8af9a9",
+		"name": "LuizaLabs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AgendaSalva",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "bffkey",
+						"value": "123456dev",
+						"type": "text"
+					},
+					{
+						"key": "x-application-key",
+						"value": "1e6ae5f0617301384853525400f0d55f",
+						"equals": true
+					},
+					{
+						"key": "x-client-auth",
+						"value": "Bearer {{token}}",
+						"equals": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dataHora\": \"20200701T12:34:00-0300\",\r\n  \"destinatario\": \"a@a.com\",\r\n  \"mensagem\": \"abcdefghijklmnopqrstuvxyz1234567890\",\r\n  \"comunicacaoTipo\":\"EMAIL\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/v1/agenda/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"v1",
+						"agenda",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

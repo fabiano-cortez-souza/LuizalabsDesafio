@@ -7,16 +7,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.luzialabs.desafio.agenda.http.HttpRequest;
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
 import br.com.luzialabs.desafio.agenda.repository.AgendaRepository;
 
 @Service
-public class AgendaService {
+public class AgendaService  extends HttpRequest{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AgendaService.class);
 
 	@Autowired
 	private AgendaRepository agendaRepository;
+	
+    public String envioPostRequest(Object payload, String address, String content_type) throws Exception {
+        
+        String response = null; 
+        LOGGER.info("[EnvioPostRequest] - enviando post Request IP {} - CONTENT-TYPE: {} ", address, content_type);             
+        response = sendPostRequest(payload.toString(), address, content_type);
+        
+        return response;
+    }	
 
 	public boolean save(AgendaModel transactionHistoryDocument) {
 		try {

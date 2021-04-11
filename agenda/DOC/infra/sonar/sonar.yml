@@ -1,0 +1,29 @@
+version: '3.6'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+    - POSTGRES_PASSWORD=Ericsson@2019
+    - POSTGRES_USER=postgre
+    - POSTGRES_DB=sonar
+    volumes:
+      - /home/administrator/postgres/postgres:/var/lib/postgresql
+      - /home/administrator/postgres/postgres_data:/var/lib/postgresql/data
+
+  sonar:
+    image: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+    - JVM_OPTS=-Xmx500m -Xms500m -XX:MaxPermSize=1024m
+    - SONARQUBE_JDBC_URL=jdbc:postgresql://db/sonar
+    - SONARQUBE_JDBC_USERNAME=postgre
+    - SONARQUBE_JDBC_PASSWORD=Ericsson@2019
+    volumes:
+      - sonarqube_data:/opt/sonarqube
+
+volumes:
+  sonarqube_data:
+    external: true

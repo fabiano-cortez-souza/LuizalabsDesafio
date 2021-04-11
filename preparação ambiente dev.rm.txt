@@ -1,0 +1,55 @@
+Sem entrar em detalhes do como, segue ações realizadas para a preparação do ambiente local de desenvolvimento:
+
+Instalação do java 11;
+Instalação do Yatta/Eclipse - profile: clean-code-sts;
+Instalação e configuração do Mavem;
+Instalação do Postman (com colection disponivel em \src\main\resources\infra\Postman\LuizaLabs.postman_collection.json);
+Instalação do Git (Git Bash e sourcetree) e customização de aliases.
+Instalação do docker windows (Mais detalhes em arquivos readme em \src\main\resources\infra):
+  - Obtenção da imagem do Mysqld (cmd: docker pull mysql) e geração do docker yml para stop/start;
+  - Obtenção da imagem Sonarqube/postgres (execução de script ) e geração do docker yml para stop/start.
+Criação da branch master no github;
+  - Clone desta branch para maquina local
+Criação de projeto "Spring Starter Project", agregando os modulos basicos:
+  - Aproveitamento de estruturas e classes de projeto em que já atuei, com as costumizações inerentes ao desafio LuizaLabs 
+
+Em relação a boas praticas TDD, BDD ou DDD
+  padroes de projeto(design patterns java)
+Como o framework Spring já esta aderente a varios padroes de projeto, pelo container Spring, seu uso já implica automaticamente no uso de varias boas praticas no desenvolvimento java, por conta da Inversão de Controle e Injeção de Dependências
+
+Abaixo segue eixo das atividades de desenvolvimento:
+ 
+ https://github.com/fabiano-cortez-souza/LuizalabsDesafio 
+ Apesar da criação da branch develop, vou realizar todos os commit's apenas na master(main).
+ 
+ Codificação 
+  agenda salva ....: 95%
+  agenda consulta .: 5%
+  agenda remove ...: 5%
+
+ Avaliação de coverage dos testes unitarios .: 15%
+ Avaliação de qualidade via Sonarqube .......: 0%
+ Geração de build da agenda .................: Já temos efetiva geração de build em imagem docker.
+
+=================================================================================
+Duvida: Em relação ao tamanho 
+
+
+
+===========================================================================================
+=== SONAR 
+Instalar/Subir os containers Sonarqube (DB - Postgresql para SQL e API APP Docker)
+ docker-compose.exe -f sonar.yml up -d
+ 
+Avaliar container:
+ docker ps
+ docker logs -f 2b2fa1153b8c :: docker logs -f <CONTAINER ID>
+
+Mavem avaliação do código Java:
+ mvn -Dsonar.host.url=http://192.168.99.100:9000 sonar:sonar
+
+Link para avaliar QA e Seg: 
+ http://192.168.99.100:9000/component_measures?id=br.com.ericsson.flex%3Aflex&metric=tests&view=list
+===========================================================================================
+
+Abaixo, breve explanação de pacotes e classes :

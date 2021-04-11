@@ -1,5 +1,6 @@
 package br.com.luzialabs.desafio.agenda.business;
 
+import java.net.HttpURLConnection;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import br.com.luzialabs.desafio.agenda.constants.Constants;
@@ -20,34 +23,95 @@ import br.com.luzialabs.desafio.agenda.http.AgendaApiResponse;
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
 import br.com.luzialabs.desafio.agenda.service.AgendaService;
 import br.com.luzialabs.desafio.agenda.utils.DateUtils;
+import br.com.luzialabs.desafio.agenda.utils.JsonUtils;
 import br.com.luzialabs.desafio.agenda.utils.Utils;
 import br.com.luzialabs.desafio.agenda.vo.AgendaVO;
 
 @Service
 public class AgendaBusiness {
-	
+ 
+    @Value("${endpoint.send.mail}")
+    private String endpointsendmail;
+    
+    @Value("${endpoint.send.sms}")
+    private String endpointsendsms;
+    
+    @Value("${endpoint.send.push}")
+    private String endpointsendpush;
+    
+    @Value("${endpoint.send.whatsapp}")
+    private String endpointsendwhatsapp;
+
 	@Autowired
 	AgendaService agendaService;
-	
+
 	public List<AgendaModel> agendaModel;
 	
+	private String httpAddress = "";
 	private boolean jUnitTest = false;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AgendaBusiness.class);
 	
 	public AgendaApiResponse saveAgenda(AgendaModel agendaModel) {
 
-	    AgendaApiResponse api = fieldValidationSave(agendaModel);
+        AgendaApiResponse api = fieldValidationSave(agendaModel);
+
+        String httpResponseBody = "";
 
         if (api == null) {
             agendaService.save(agendaModel);
-            api = new AgendaApiResponse(SuccessMessage.TRANSACTION_SUCCESS);
+
+            /*
+             * Envio da mensagem pelo endpoint identiticado 
+             */
+            try {
+                httpResponseBody = agendaService.envioPostRequest(agendaModel.toString(), 
+                                                                  httpAddress,
+                                                                  MediaType.APPLICATION_JSON_VALUE);
+
+                if (agendaService.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    api = new AgendaApiResponse(SuccessMessage.TRANSACTION_SUCCESS);
+                } else {
+                    api = JsonUtils.getGson().fromJson(httpResponseBody, AgendaApiResponse.class);
+                }
+            } catch (Exception exception) {
+                LOGGER.info("START_Exception_FAILED" + 
+                            " HTTPRESPONSEBODY = {}" + 
+                            " APIRESPONSE = {}"      + 
+                            " EXCEPTION = {}"        + 
+                            " END_Exception_FAILED",
+                            httpResponseBody, 
+                            api, 
+                            exception.getMessage());
+
+                api = new AgendaApiResponse(ErrorType.HTTP_RESPONSE_SEND_DENIED);
+            }
+
         }
         return api;
-	}
+    }
 
 	public AgendaApiResponse fieldValidationSave(AgendaModel agendaModel) {
 			
+	    ComunicacaoTipoEnum comunicacaoTipoEnum = ComunicacaoTipoEnum.valueOf(agendaModel.getComunicacaoTipo());
+	     
+        switch (comunicacaoTipoEnum) {
+        case EMAIL:
+            httpAddress = endpointsendmail;
+            break;
+        case PUSH:
+            httpAddress = endpointsendpush;
+            break;
+        case SMS:
+            httpAddress = endpointsendsms;
+            break;
+        case WHATSAPP:
+            httpAddress = endpointsendwhatsapp;
+            break;
+        default:
+            return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_COMMUNICATION_TYPE_INVALID);
+        }
+
 		if( StringUtils.isBlank(agendaModel.getDataHora()) || 
 		    StringUtils.isBlank(agendaModel.getDestinatario()) ||
 			StringUtils.isBlank(agendaModel.getMensagem())) {
@@ -57,10 +121,6 @@ public class AgendaBusiness {
 		
 		if(Utils.invalidTimestampFormat(agendaModel.getDataHora())) {	    
 		    return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_TIMESTAMP_INVALID);
-		}
-		
-		if (! ComunicacaoTipoEnum.contains(agendaModel.getComunicacaoTipo())) {
-		    return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_COMMUNICATION_TYPE_INVALID);
 		}
 		
 		if(! StatusEnvioEnum.contains(agendaModel.getStatusEnvio())) {
@@ -75,40 +135,6 @@ public class AgendaBusiness {
             return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_DESCRIPTION_INVALID);
         }	
         
-       
-        
-		/*
-
-		
-		if(!Utils.hasOnlyNumbers(agendaModel.getAmount()) || 
-	       Utils.fieldOutOfRange(agendaModel.getAmount())) {
-	         
-		    return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_AMOUNT_INVALID);
-		}
-	      
-		if(agendaModel.getType().length() > 20) {
-            
-            return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_TYPE_INVALID);
-        }
-	      
-		if(agendaModel.getTransactionID().length() > Constants.DEFAULT_TRANSACTION_ID_LENGTH) {
-            
-            return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_TRANSACTIONID_INVALID);
-        }      
-	        
-		if(StringUtils.isBlank(agendaModel.getDescription())) {
-            return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_DESCRIPTION_INVALID);
-        }
-		
-
-		
-		agendaModel.setId(agendaModel.getTransactionID());
-		
-		if(agendaService.eventExists(agendaModel.getTransactionID())) {
-            
-		    return new AgendaApiResponse(ErrorType.DOCUMENT_ALREADY_EXISTS);
-        }
-		/**/
 		return null;
 	}
 	
@@ -166,10 +192,7 @@ public class AgendaBusiness {
             }
             
             apiResponse = new AgendaApiResponse(SuccessMessage.TRANSACTION_SEARCH_SUCCESS,
-                                                            numPage,
-                                                            totalPages,
-                                                            totalOfDocuments,
-                                                            listAgendaVO);
+                                                listAgendaVO);
         }
         
         return apiResponse;

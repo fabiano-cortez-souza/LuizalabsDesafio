@@ -52,9 +52,6 @@ public class ApiResponse {
     private String amount;
     
     @JsonInclude(Include.NON_NULL)
-    private String transactionID;
-    
-    @JsonInclude(Include.NON_NULL)
     private String message;
     
     @JsonInclude(Include.NON_NULL)
@@ -81,17 +78,6 @@ public class ApiResponse {
         this.messageDetail = successMessage.getDesc();
         this.apiReferences = new HttpStatusReference("related", referenceAddress);
     }
-	
-	public ApiResponse(SuccessMessage successMessage,
-                       String amount,
-                       String transactionId) {
-		this.transactionID = transactionId;
-		this.requestId = Utils.generateId();
-		this.code = successMessage.getCode();
-		this.messageDetail = successMessage.getDesc();
-		this.amount = amount;
-        this.apiReferences = new HttpStatusReference("related", referenceAddress);
-	}
 
     public HttpServletRequest getRequest() {
         return request;
@@ -179,14 +165,6 @@ public class ApiResponse {
 
 	public void setAmount(String amount) {
 		this.amount = amount;
-	}
-
-	public String getTransactionID() {
-		return transactionID;
-	}
-
-	public void setTransactionID(String transactionID) {
-		this.transactionID = transactionID;
 	}
 
 	public String getMessage() {
