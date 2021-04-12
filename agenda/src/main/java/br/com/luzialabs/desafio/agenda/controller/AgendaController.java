@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.luzialabs.desafio.agenda.business.AgendaBusiness;
 import br.com.luzialabs.desafio.agenda.dto.AgendaDTO;
+import br.com.luzialabs.desafio.agenda.enums.RemocaoTipoEnum;
 import br.com.luzialabs.desafio.agenda.enums.StatusEnvioEnum;
 import br.com.luzialabs.desafio.agenda.http.AgendaApiResponse;
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
@@ -82,21 +83,20 @@ public class AgendaController{
         
     }
 	
-	@GetMapping(value = "/api/v1/agendaRemove", produces = { "application/json; charset=utf-8"})
-    public ResponseEntity<Object> agendaFindParametro(@RequestParam(value = "startDate", required = true) String startDate, 
-                                                      @RequestParam(value = "endDate", required = true) String endDate, 
-                                                      @RequestParam(value = "numRecord", required = true) String numRecord,
-                                                      @RequestParam(value = "numPage", required = false) String numPage,
-                                                      HttpServletRequest request, 
-                                                      HttpServletResponse response) {
+	@PostMapping(value = "/api/v1/agendaRemove", produces = { "application/json; charset=utf-8"})
+    public ResponseEntity<Object> agendaDeleteParametro(@RequestParam(value = "startDate", required = false) String startDate, 
+                                                        @RequestParam(value = "endDate", required = false) String endDate, 
+                                                        @RequestParam(value = "id", required = true) String id,
+                                                        @RequestParam(value = "tipoRemocao", required = true) int tipoRemocao,
+                                                        HttpServletRequest request, 
+                                                        HttpServletResponse response) {
 	    
 	    AgendaDTO agendaDTO = new AgendaDTO();
         agendaDTO.setStartDate(startDate);
         agendaDTO.setEndDate(endDate);
-        agendaDTO.setNumPage(numPage);
-        agendaDTO.setNumRecord(numRecord);
+        agendaDTO.setRequestId(Long.parseLong(id));
       
-        AgendaApiResponse apiResponse = agendaBusiness.findAgendaDocuments(agendaDTO);
+        AgendaApiResponse apiResponse = agendaBusiness.deleteAgendaDocument(agendaDTO, tipoRemocao);
         
         LOGGER.info("apiResponse = {} ", apiResponse.getMessage());
         

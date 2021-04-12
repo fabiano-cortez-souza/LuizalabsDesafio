@@ -57,6 +57,140 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "AgendaConsultaDatas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "bffkey",
+						"value": "123456dev",
+						"type": "text"
+					},
+					{
+						"key": "x-application-key",
+						"value": "1e6ae5f0617301384853525400f0d55f",
+						"equals": true
+					},
+					{
+						"key": "x-client-auth",
+						"value": "Bearer {{token}}",
+						"equals": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dataHora\": \"20200701T12:34:00-0300\",\r\n  \"destinatario\": \"a@a.com\",\r\n  \"mensagem\": \"abcdefghijklmnopqrstuvxyz1234567890\",\r\n  \"comunicacaoTipo\":\"EMAIL\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/v1/agendaConsulta/20200701/20200706/100?numPage=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"v1",
+						"agendaConsulta",
+						"20200701",
+						"20200706",
+						"100"
+					],
+					"query": [
+						{
+							"key": "numPage",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAgendas",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "bffkey",
+						"value": "123456dev",
+						"type": "text"
+					},
+					{
+						"key": "x-application-key",
+						"value": "1e6ae5f0617301384853525400f0d55f",
+						"equals": true
+					},
+					{
+						"key": "x-client-auth",
+						"value": "Bearer {{token}}",
+						"equals": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"dataHora\": \"20200701T12:34:00-0300\",\r\n  \"destinatario\": \"a@a.com\",\r\n  \"mensagem\": \"abcdefghijklmnopqrstuvxyz1234567890\",\r\n  \"comunicacaoTipo\":\"EMAIL\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8089/api/v1/agendaRemove?startDate=20200701&endDate=20200702&id=4&tipoRemocao=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8089",
+					"path": [
+						"api",
+						"v1",
+						"agendaRemove"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "20200701"
+						},
+						{
+							"key": "endDate",
+							"value": "20200702"
+						},
+						{
+							"key": "id",
+							"value": "4"
+						},
+						{
+							"key": "tipoRemocao",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

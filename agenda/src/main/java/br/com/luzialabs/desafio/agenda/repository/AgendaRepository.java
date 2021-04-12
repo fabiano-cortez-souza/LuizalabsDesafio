@@ -2,29 +2,25 @@ package br.com.luzialabs.desafio.agenda.repository;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
 
 @Repository
-public interface AgendaRepository extends CrudRepository<AgendaModel, String> {
+public interface AgendaRepository extends JpaRepository<AgendaModel, String> {
+    
+	@Query(value = "SELECT COUNT(*) FROM agenda WHERE data_hora >= ?1 AND data_hora <= ?2", nativeQuery  = true)
+	long countWithDataHoraRange(String strDate,
+			                    String endDate);
 	
-    /*
-	//@Query(value = "{ $and: [{ 'msisdn' : { $eq : ?0 } }, { 'timestamp' : { $gte : ?1, $lte: ?2 } } ]}", count = true)
-	@Query(value = "SELECT * FROM transactionHistory WHERE msisdn = @_msisdn AND timestamp >= @_strDate AND timestamp <= @_endDate", count = true)
-	long countWithTimeStampRange(@Param("_msisdn")  String msisdn,
-			                     @Param("_strDate") String strDate,
-			                     @Param("_endDate") String endDate);
+	@Query(value = "SELECT * FROM agenda WHERE data_hora >= ?1 AND data_hora <= ?2 ORDER BY data_hora DESC", nativeQuery  = true)
+	List<AgendaModel> getByDataHora(String strDate,
+									String endDate);
 	
-	
-	//@Query("{ $and: [{ 'msisdn' : { $eq : ?0 } }, { 'timestamp' : { $gte : ?1, $lte: ?2 } } ]}, sort = { 'timeStamp' : -1 }")
-	@Query("SELECT * FROM transactionHistory WHERE msisdn = @_msisdn AND timestamp >= @_strDate AND timestamp <= @_endDate ORDER BY timestamp DESC")
-	List<AgendaInclusaoModel> getMsisdnByTimestamp(@Param("_msisdn")  String msisdn,
-											           @Param("_strDate") String strDate,
-													   @Param("_endDate") String endDate, 
-													   Pageable pageable);
-	*/
 	List<AgendaModel> findById(long id);
-	
+
+    boolean existsById(long id);
+
 }

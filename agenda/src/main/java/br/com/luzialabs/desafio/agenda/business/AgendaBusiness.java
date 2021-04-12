@@ -1,7 +1,7 @@
 package br.com.luzialabs.desafio.agenda.business;
 
 import java.net.HttpURLConnection;
-import java.time.format.DateTimeParseException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +17,10 @@ import br.com.luzialabs.desafio.agenda.constants.Constants;
 import br.com.luzialabs.desafio.agenda.dto.AgendaDTO;
 import br.com.luzialabs.desafio.agenda.enums.ComunicacaoTipoEnum;
 import br.com.luzialabs.desafio.agenda.enums.ErrorType;
+import br.com.luzialabs.desafio.agenda.enums.RemocaoTipoEnum;
 import br.com.luzialabs.desafio.agenda.enums.StatusEnvioEnum;
 import br.com.luzialabs.desafio.agenda.enums.SuccessMessage;
+import br.com.luzialabs.desafio.agenda.enums.TimeLimitEnum;
 import br.com.luzialabs.desafio.agenda.http.AgendaApiResponse;
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
 import br.com.luzialabs.desafio.agenda.service.AgendaService;
@@ -70,12 +72,12 @@ public class AgendaBusiness {
                                                                   MediaType.APPLICATION_JSON_VALUE);
 
                 if (agendaService.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    api = new AgendaApiResponse(SuccessMessage.TRANSACTION_SUCCESS);
+                    api = new AgendaApiResponse(SuccessMessage.AGENDA_SUCCESS);
                 } else {
                     api = JsonUtils.getGson().fromJson(httpResponseBody, AgendaApiResponse.class);
                 }
             } catch (Exception exception) {
-                LOGGER.info("START_Exception_FAILED" + 
+                LOGGER.info("[saveAgenda] START_Exception_FAILED" + 
                             " HTTPRESPONSEBODY = {}" + 
                             " APIRESPONSE = {}"      + 
                             " EXCEPTION = {}"        + 
@@ -138,87 +140,124 @@ public class AgendaBusiness {
 		return null;
 	}
 	
-	public AgendaApiResponse findAgendaDocuments(AgendaDTO agendaDTO) {
+    public AgendaApiResponse deleteAgendaDocument(AgendaDTO agendaDTO, int tipoRemocao) {
+        AgendaApiResponse apiResponse = null;
+        AgendaModel agenda = new AgendaModel();
         
-	    agendaModel = new ArrayList<AgendaModel>();
-	    List<AgendaModel> listaById = new ArrayList<AgendaModel>();
-	    
+        if (tipoRemocao == 1 || tipoRemocao == 2) {
+            agendaDTO.setRemocaoTipoEnum(RemocaoTipoEnum.getFromCode(tipoRemocao));
+
+            try {
+                agendaDTO = parseDateToTimestamp(agendaDTO);
+
+                List<AgendaModel> listagenda = agendaService.findAgendaById(agendaDTO.getRequestId());
+
+                List<AgendaModel> listagendas = agendaService.getAgendaByDataHora(agendaDTO.getStartDate(),
+                        agendaDTO.getEndDate());
+
+                if (agendaDTO.getRemocaoTipoEnum().equals(RemocaoTipoEnum.BY_ID)) {
+                    if (listagenda.size() > 0) {
+                        agenda = listagenda.get(0);
+                        if (agendaService.delete(agenda)) {
+                            apiResponse = new AgendaApiResponse(SuccessMessage.AGENDA_DELETE, agenda);
+                        }
+                    } else {
+                        apiResponse = new AgendaApiResponse(ErrorType.DOCUMENT_NOT_EXISTS);
+                    }
+                } else if (agendaDTO.getRemocaoTipoEnum().equals(RemocaoTipoEnum.BY_DATE)) {
+                    if (listagendas.size() > 0) {
+                        
+                        listagendas.forEach(agenda1 -> { agendaService.delete(agenda1); });
+                        
+                        apiResponse = new AgendaApiResponse(SuccessMessage.AGENDA_DELETE);
+                        apiResponse.setListagendas(listagendas);       
+                        
+                    } else {
+                        apiResponse = new AgendaApiResponse(ErrorType.DOCUMENT_NOT_EXISTS);
+                    }
+                }
+            } catch (ParseException e) {
+                apiResponse = new AgendaApiResponse(ErrorType.FIELD_VALIDATION_DATE_INVALID);
+            }
+        } else {
+            apiResponse = new AgendaApiResponse(ErrorType.FIELD_VALIDATION_TYPE_DELETE_INVALID);
+        }
+        return apiResponse;
+    }
+    
+    public AgendaApiResponse findAgendaDocuments(AgendaDTO agendaDTO) {
+
+        agendaModel = new ArrayList<AgendaModel>();
         AgendaApiResponse apiResponse = fieldValidationFind(agendaDTO);
         List<AgendaVO> listAgendaVO = new ArrayList<AgendaVO>();
-        
-        int numPage = agendaDTO.getNumPage() != null && !agendaDTO.getNumPage().equals("") ? Integer.parseInt(agendaDTO.getNumPage()) : 0;
-        int numRecord = Integer.parseInt(agendaDTO.getNumRecord());
-        
-        if(apiResponse == null) {
-        	
-            if(!jUnitTest) {
-                listaById = agendaService.findAgendaById(agendaDTO.getRequestId());
-            }
-            
-            for (AgendaModel agendaModel : listaById) {
-                
-/*                DateTime timestampDate = DateTime.parse(agendaModel.getTimestamp());
-                DateTime strDate = DateTime.parse(agendaDTO.getStartDate()+ "T" + LocalTime.of(0, 0, 0));
-                DateTime endDate = DateTime.parse(agendaDTO.getEndDate()+ "T" + LocalTime.of(23, 59, 59));
-                
-                if (agendaModel.size() <= numRecord && 
-                    ((timestampDate.isAfter(strDate) && timestampDate.isBefore(endDate)) ||
-                      timestampDate.isEqual(strDate) || timestampDate.isEqual(endDate))) {
-                    
-                    agendaModel.add(agendaModel);
+
+        try {
+            agendaDTO = parseDateToTimestamp(agendaDTO);
+            int numPage = agendaDTO.getNumPage() != null && !agendaDTO.getNumPage().equals("")
+                    ? Integer.parseInt(agendaDTO.getNumPage())
+                    : 0;
+            int numRecord = Integer.parseInt(agendaDTO.getNumRecord());
+
+            if (apiResponse == null) {
+
+                if (!jUnitTest) {
+                    agendaModel = agendaService.getAgendaByDataHora(agendaDTO.getStartDate(), agendaDTO.getEndDate());
                 }
-    */
-            }
-            
-            long totalOfDocuments = agendaModel.size();
-            int totalPages = Utils.calculateTotalOfPages(totalOfDocuments, numRecord);
-            
-            if(totalPages == 0) { 
-                totalPages = 1;
-            }
-            
-            if(!agendaModel.isEmpty()) {
-                for (AgendaModel agendaModel : agendaModel) {
-                    
-                    AgendaVO agendaVO = new AgendaVO();
-/*                  agendaVO.setTimestamp(agendaModel.getTimestamp());
-                    agendaVO.setType(agendaModel.getType());
-                    agendaVO.setAmount(agendaModel.getAmount());
-                    agendaVO.setDescription(agendaModel.getDescription());
-                    agendaVO.setTransactionId(agendaModel.getTransactionID());
-*/
-                    listAgendaVO.add(agendaVO);
+
+                long totalOfDocuments = agendaModel.size();
+                int totalPages = Utils.calculateTotalOfPages(totalOfDocuments, numRecord);
+
+                if (totalPages == 0) {
+                    totalPages = 1;
                 }
+
+                if (totalPages <= numPage) {
+                    if (!agendaModel.isEmpty()) {
+                        for (AgendaModel agendaModel : agendaModel) {
+
+                            AgendaVO agendaVO = new AgendaVO();
+                            agendaVO.setId(agendaModel.getId());
+                            agendaVO.setDataHora(agendaModel.getDataHora());
+                            agendaVO.setDestinatario(agendaModel.getDestinatario());
+                            agendaVO.setMensagem(agendaModel.getMensagem());
+                            agendaVO.setComunicacaoTipo(agendaModel.getComunicacaoTipo());
+                            agendaVO.setStatusEnvio(agendaModel.getStatusEnvio());
+
+                            listAgendaVO.add(agendaVO);
+                        }
+                    }
+                } else {
+                    apiResponse = new AgendaApiResponse(ErrorType.DOCUMENT_COUNT_LIMIT_OVERFLOW);
+                }
+
+                apiResponse = new AgendaApiResponse(SuccessMessage.AGENDA_SEARCH_SUCCESS, listAgendaVO);
             }
-            
-            apiResponse = new AgendaApiResponse(SuccessMessage.TRANSACTION_SEARCH_SUCCESS,
-                                                listAgendaVO);
+        } catch (ParseException exception) {
+            LOGGER.info("[findAgendaDocuments] Parse error = " + 
+                    " AgendaDTO = {}" + 
+                    " EXCEPTION = {}",
+                    agendaDTO.toString(), 
+                    exception.getMessage());
+            apiResponse = new AgendaApiResponse(ErrorType.FIELD_VALIDATION_DATE_INVALID);
         }
-        
         return apiResponse;
     }
     
     public AgendaApiResponse fieldValidationFind(AgendaDTO agendaDTO) {
         
-/*        if(StringUtils.isBlank(agendaDTO.getStartDate()) || 
-           StringUtils.isBlank(agendaDTO.getMsisdn()) ||
+        if(StringUtils.isBlank(agendaDTO.getStartDate()) || 
            StringUtils.isBlank(agendaDTO.getEndDate()) ||
            StringUtils.isBlank(agendaDTO.getNumRecord())) {
             
             return new AgendaApiResponse (ErrorType.FIELD_VALIDATION_REQUIRED_FIELD_NOT_FOUND);
         }
         
-        if(invalidDateFormat(agendaDTO.getStartDate()) ||
-           invalidDateFormat(agendaDTO.getEndDate())) {
+        if(Utils.dateValidation(agendaDTO.getStartDate()) ||
+           Utils.dateValidation(agendaDTO.getEndDate())) {
             
             return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_DATE_INVALID);
         }
         
-        if (!Utils.hasOnlyNumbers(agendaDTO.getMsisdn()) ||
-            agendaDTO.getMsisdn().length() > Constants.MSISDN_LENGTH) {
-            
-            return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_MSISDN_INVALID);
-        }
                 
         if(!Utils.hasOnlyNumbers(agendaDTO.getNumRecord()) ||
            Integer.parseInt(agendaDTO.getNumRecord()) < 1 || 
@@ -231,26 +270,19 @@ public class AgendaBusiness {
            !Utils.hasOnlyNumbers(agendaDTO.getNumPage())) {
            
             return new AgendaApiResponse(ErrorType.FIELD_VALIDATION_NUMPAGE_INVALID);
-        }*/
-        
-        
-//      if(ChronoUnit.DAYS.between(DateUtils.getLocalDateOf(transactionHistorySolicitation.getStartDate()), 
-//                                 DateUtils.getLocalDateOf(transactionHistorySolicitation.getEndDate())) == 0) {
-//          
-//          transactionHistorySolicitation.setStartDate(transactionHistorySolicitation.getStartDate() + "T" + LocalTime.of(0, 0, 0));
-//          transactionHistorySolicitation.setEndDate(transactionHistorySolicitation.getEndDate() + "T" + LocalTime.of(23, 59, 59));
-//      }
+        }
         
         return null;
     }
+    
+    private AgendaDTO parseDateToTimestamp(AgendaDTO agendaDTO) throws ParseException{
+        agendaDTO.setStartDate(
+                DateUtils.parseDateToTimestamp(agendaDTO.getStartDate(), TimeLimitEnum.STARTTIME).toString());
 
-    private boolean invalidDateFormat(String startDate) {
-        try {
-            DateUtils.dateValidation(startDate);
-            return false;
-        } catch (DateTimeParseException dateTimeParseException) {
-            return true;
-        }
+        agendaDTO.setEndDate(
+                DateUtils.parseDateToTimestamp(agendaDTO.getEndDate(), TimeLimitEnum.ENDTIME).toString());
+
+        return agendaDTO;
     }
     
     public AgendaService getTransactionHistoryService() {
@@ -276,6 +308,4 @@ public class AgendaBusiness {
     public void setjUnitTest(boolean jUnitTest) {
         this.jUnitTest = jUnitTest;
     }
-	
-    
 }

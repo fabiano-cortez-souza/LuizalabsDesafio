@@ -2,9 +2,9 @@ package br.com.luzialabs.desafio.agenda.enums;
 
 public enum SuccessMessage {
 	
-	TRANSACTION_SUCCESS(0, "The transaction was successfully"),
-	TRANSACTION_SEARCH_SUCCESS(0, "Search was successfully"),
-    OCS_SUCCESS(0, "The OCS was successfully");
+	AGENDA_SUCCESS(0, "The agenda write was successfully"),
+	AGENDA_SEARCH_SUCCESS(0, "Search agenda was successfully"),
+	AGENDA_DELETE(0, "The agenda delete was successfully");
 	
 	private String desc;
 	private int code;

@@ -2,6 +2,8 @@ package br.com.luzialabs.desafio.agenda.dto;
 
 import javax.persistence.Column;
 
+import br.com.luzialabs.desafio.agenda.enums.RemocaoTipoEnum;
+
 public class AgendaDTO {
 	
     @Column(name = "requestId")
@@ -18,6 +20,9 @@ public class AgendaDTO {
 
     @Column(name = "numRecord")
 	private String numRecord;
+    
+    @Column(name = "remocaoTipoEnum")
+    private RemocaoTipoEnum remocaoTipoEnum;
 
 	public String getStartDate() {
 		return startDate;
@@ -58,6 +63,14 @@ public class AgendaDTO {
 	public void setRequestId(long requestId) {
 		this.requestId = requestId;
 	}
+
+    public RemocaoTipoEnum getRemocaoTipoEnum() {
+        return remocaoTipoEnum;
+    }
+
+    public void setRemocaoTipoEnum(RemocaoTipoEnum remocaoTipoEnum) {
+        this.remocaoTipoEnum = remocaoTipoEnum;
+    }
 
 	
 }

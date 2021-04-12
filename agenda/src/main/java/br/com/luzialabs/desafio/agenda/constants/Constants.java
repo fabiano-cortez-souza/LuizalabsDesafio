@@ -4,7 +4,7 @@ public final class Constants {
             
     public static final String TIME_ZONE_ID = "UTC";
     public static final String TIMESTAMP_FORMAT = "yyyMMdd'T'HH:mm:ssZ";
-    public static final String DATE_FORMAT = "yyyMMdd";
+    public static final String DATE_FORMAT = "yyyyMMdd";
     public static final String TIME_ZONE_LOCAL_ID = "America/Sao_Paulo";
     public static final String PIPES = "\\|\\|";
     public static final int MSISDN_LENGTH = 13;
