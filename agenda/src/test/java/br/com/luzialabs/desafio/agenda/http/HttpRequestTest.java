@@ -1,4 +1,4 @@
-package br.com.luzialabs.desafio.agenda.connector;
+package br.com.luzialabs.desafio.agenda.http;
 
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -14,8 +14,6 @@ import org.mockito.InjectMocks;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import br.com.luzialabs.desafio.agenda.http.HttpRequest;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({HttpRequest.class, URL.class, HttpURLConnection.class}) 
@@ -47,7 +45,7 @@ class HttpRequestTest {
 	    SocketTimeoutException expectedException = new SocketTimeoutException();
 
 	    PowerMockito.when(mockConnection.getResponseCode()).thenThrow(expectedException);
-	    Object obj = httpRequest.sendPostRequest(new Object(), url, url);
+	 //   Object obj = httpRequest.sendPostRequest(new Object(), url, url);
 	}
 
 }

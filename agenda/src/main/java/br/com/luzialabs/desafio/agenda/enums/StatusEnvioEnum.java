@@ -3,6 +3,7 @@ package br.com.luzialabs.desafio.agenda.enums;
 public enum StatusEnvioEnum {
 
     ENVIADO(1,"ENVIADO"),
+    NAO_ENVIADO(1,"NAO ENVIADO"),
     PENDENTE(2,"PENDENTE"),
 	RECEBIDO(3,"RECEBIDO");
 			

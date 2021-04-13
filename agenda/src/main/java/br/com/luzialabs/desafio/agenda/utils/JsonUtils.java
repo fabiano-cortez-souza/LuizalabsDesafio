@@ -2,6 +2,7 @@ package br.com.luzialabs.desafio.agenda.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.JSONObject;
 import org.json.XML;
@@ -15,7 +16,9 @@ public final class JsonUtils {
 	
     private static final Gson gson = new Gson();
 	    
-	private JsonUtils() {}
+    private JsonUtils() {
+        throw new IllegalStateException("Utility class");
+    }	
 
 	public static String parseToJsonString(Object object) {
 	    return gson.toJson(object);
@@ -33,7 +36,8 @@ public final class JsonUtils {
 	    return gson.toJson(map);
 	}
 	  
-	public static Object addRootName(String rootName, String jsonString) {
+	@SuppressWarnings("deprecation")
+    public static Object addRootName(String rootName, String jsonString) {
 	    JsonElement je = new JsonParser().parse(jsonString);
 	    JsonObject jo = new JsonObject();
 	    jo.add(rootName, je);
@@ -45,20 +49,22 @@ public final class JsonUtils {
 		return XML.toString(json);
 	}
 
-	public static HashMap<String, Object> getFieldsWithTypeValueString(HashMap<String, String[]> typeField) {
+	public static Map<Integer, Object> getFieldsWithTypeValueString(Map<Integer, String[]> typeField) {
 		
-	    HashMap<String, Object> fieldTypeValue = new HashMap<String, Object>();
-		
-		if(typeField != null && !typeField.isEmpty()) {
-		    for(String fieldName : typeField.keySet()) {
-	            if(typeField.size() > 0) {
-	                String fieldType = typeField.get(fieldName)[0];
-	                String fieldValue = typeField.get(fieldName)[1];
-	                Object fieldInJsonFormat = JsonUtils.addRootName(fieldType,fieldValue);
-	                fieldTypeValue.put(fieldName, fieldInJsonFormat);
-	            }
-	        }
-		}
+	    Map<Integer, Object> fieldTypeValue = new HashMap<>();
+
+        if (typeField != null && !typeField.isEmpty()) {
+            for (Entry<Integer, String[]> entry : typeField.entrySet()) {
+
+                Integer key = entry.getKey();
+                String[] value = entry.getValue();
+                String fieldType = value[0];
+                String fieldValue = value[1];
+                Object fieldInJsonFormat = JsonUtils.addRootName(fieldType, fieldValue);
+                fieldTypeValue.put(key, fieldInJsonFormat);
+
+            }
+        }
 		return fieldTypeValue;
 	}
 

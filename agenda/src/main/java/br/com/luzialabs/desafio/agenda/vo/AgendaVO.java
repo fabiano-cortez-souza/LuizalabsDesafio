@@ -4,11 +4,9 @@ import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import br.com.luzialabs.desafio.agenda.utils.JsonUtils;
+import br.com.luzialabs.desafio.agenda.base.ParseObjToJsonString;
 
-public class AgendaVO { 
-
-	private static final long serialVersionUID = 1L;
+public class AgendaVO extends ParseObjToJsonString { 
     
     @Id
     @JsonProperty("id")
@@ -44,12 +42,7 @@ public class AgendaVO {
 	    this.mensagem = mensagem;    
 	    this.comunicacaoTipo = comunicacaoTipo;
 	    this.statusEnvio = statusEnvio; 	
-	}
-	
-    @Override
-    public String toString() {
-        return JsonUtils.parseToJsonString(this);
-    }	
+	}	
 
     public long getId() {
         return id;

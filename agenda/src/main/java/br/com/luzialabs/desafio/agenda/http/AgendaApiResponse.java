@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import br.com.luzialabs.desafio.agenda.dto.AgendaDTO;
-import br.com.luzialabs.desafio.agenda.enums.ErrorType;
-import br.com.luzialabs.desafio.agenda.enums.SuccessMessage;
+import br.com.luzialabs.desafio.agenda.enums.ErrorTypeEnum;
+import br.com.luzialabs.desafio.agenda.enums.SuccessMessageEnum;
 import br.com.luzialabs.desafio.agenda.model.AgendaModel;
 import br.com.luzialabs.desafio.agenda.vo.AgendaVO;
 
@@ -27,19 +27,19 @@ public class AgendaApiResponse extends ApiResponse {
     
 	public AgendaApiResponse() {}
 	
-	public AgendaApiResponse(SuccessMessage successMessage, List<AgendaVO> agendas) {
+	public AgendaApiResponse(SuccessMessageEnum successMessage, List<AgendaVO> agendas) {
 	    this.setMessageDetail(successMessage.getDesc());
 	    this.setCode(successMessage.getCode());
 	    this.agendas = agendas;
 	}
 	
-    public AgendaApiResponse(SuccessMessage successMessage, AgendaDTO agendaDTO) {
+    public AgendaApiResponse(SuccessMessageEnum successMessage, AgendaDTO agendaDTO) {
         this.setMessageDetail(successMessage.getDesc());
         this.setCode(successMessage.getCode());
         this.agendaDTO = agendaDTO;
     }
     
-    public AgendaApiResponse(SuccessMessage successMessage, AgendaModel agenda) {
+    public AgendaApiResponse(SuccessMessageEnum successMessage, AgendaModel agenda) {
         this.setMessageDetail(successMessage.getDesc());
         this.setCode(successMessage.getCode());
         this.agendaModel = agenda;
@@ -53,11 +53,11 @@ public class AgendaApiResponse extends ApiResponse {
         this.listagendas = listagendas;
     }
 
-    public AgendaApiResponse(ErrorType errorType) {
+    public AgendaApiResponse(ErrorTypeEnum errorType) {
 		super(errorType);
     }
 	
-	public AgendaApiResponse(SuccessMessage successMessage) {
+	public AgendaApiResponse(SuccessMessageEnum successMessage) {
 		super(successMessage);
     }
 

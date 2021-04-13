@@ -2,7 +2,7 @@ package br.com.luzialabs.desafio.agenda.enums;
 
 import java.net.HttpURLConnection;
 
-public enum ErrorType {
+public enum ErrorTypeEnum {
 	
     FIELD_VALIDATION_COMMUNICATION_TYPE_INVALID(1,"Communication type is invalid"),
 	FIELD_VALIDATION_REQUIRED_FIELD_NOT_FOUND(1, "Required field not found"),
@@ -14,6 +14,7 @@ public enum ErrorType {
 	FIELD_VALIDATION_TRANSACTIONID_INVALID(6, "TransactionId field is invalid"),
 	FIELD_VALIDATION_DESCRIPTION_INVALID(7, "Description field is invalid"),
 	FIELD_VALIDATION_DATE_INVALID(4, "Date format is invalid"),
+	FIELD_VALIDATION_EMAIL_INVALID(4, "Email format is invalid"),
 	FIELD_VALIDATION_NUMRECORDS_INVALID(3,"NumRecord format is invalid"),
 	FIELD_VALIDATION_NUMPAGE_INVALID(3,"NumPage format is invalid"),
 	DOCUMENT_ALREADY_EXISTS(8, "This event already exists"),
@@ -26,7 +27,7 @@ public enum ErrorType {
     public final Integer code;
     private final String desc;
     
-    private ErrorType(Integer c, String s) {
+    private ErrorTypeEnum(Integer c, String s) {
         this.code = c;
         this.desc = s;
     }
@@ -43,12 +44,12 @@ public enum ErrorType {
         return name();
     }
     
-    public static ErrorType getFromCode(Integer code) {
+    public static ErrorTypeEnum getFromCode(Integer code) {
         if (code == null || code == 0) {
             return null;
         }
 
-        for (ErrorType value : values()) {
+        for (ErrorTypeEnum value : values()) {
             if (value.code.equals(code)) {
                 return value;
             }

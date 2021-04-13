@@ -2,9 +2,22 @@ package br.com.luzialabs.desafio.agenda.dto;
 
 import javax.persistence.Column;
 
+import br.com.luzialabs.desafio.agenda.base.ParseObjToJsonString;
 import br.com.luzialabs.desafio.agenda.enums.RemocaoTipoEnum;
 
-public class AgendaDTO {
+public class AgendaDTO extends ParseObjToJsonString {
+    
+    @Column(name = "dataHora")
+    private String dataHora;
+
+    @Column(name = "destinatario")
+    private String destinatario;
+
+    @Column(name = "mensagem")
+    private String mensagem;    
+    
+    @Column(name = "comunicacaoTipo")
+    private String comunicacaoTipo;
 	
     @Column(name = "requestId")
 	private long requestId;
@@ -24,23 +37,63 @@ public class AgendaDTO {
     @Column(name = "remocaoTipoEnum")
     private RemocaoTipoEnum remocaoTipoEnum;
 
-	public String getStartDate() {
-		return startDate;
-	}
+    public String getDataHora() {
+        return dataHora;
+    }
 
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
+    public void setDataHora(String dataHora) {
+        this.dataHora = dataHora;
+    }
 
-	public String getEndDate() {
-		return endDate;
-	}
+    public String getDestinatario() {
+        return destinatario;
+    }
 
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
+    }
 
-	public String getNumPage() {
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+
+    public String getComunicacaoTipo() {
+        return comunicacaoTipo;
+    }
+
+    public void setComunicacaoTipo(String comunicacaoTipo) {
+        this.comunicacaoTipo = comunicacaoTipo;
+    }
+
+    public long getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(long requestId) {
+        this.requestId = requestId;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getNumPage() {
         return numPage;
     }
 
@@ -56,14 +109,6 @@ public class AgendaDTO {
         this.numRecord = numRecord;
     }
 
-    public long getRequestId() {
-		return requestId;
-	}
-
-	public void setRequestId(long requestId) {
-		this.requestId = requestId;
-	}
-
     public RemocaoTipoEnum getRemocaoTipoEnum() {
         return remocaoTipoEnum;
     }
@@ -72,5 +117,5 @@ public class AgendaDTO {
         this.remocaoTipoEnum = remocaoTipoEnum;
     }
 
-	
+		
 }

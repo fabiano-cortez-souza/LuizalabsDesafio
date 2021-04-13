@@ -19,7 +19,6 @@ import br.com.luzialabs.desafio.agenda.vo.AgendaVO;
 class JsonUtilsTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JsonUtilsTest.class);
-    private static final Gson gson = new Gson();
     
 	@Test
 	void validMapShouldReturnValidJsonString() {
@@ -97,25 +96,26 @@ class JsonUtilsTest {
     
     @Test
     void shouldPassGetFieldsWithTypeValueString() {
-        String[] teste = {"teste", "teste1"};
+        String[] teste1 = {"teste1", "teste11"};
+        String[] teste2 = {"teste2", "teste22"};
         //String[] teste1 = {"datetime.iso", "20201001T17:20500300"};
-        HashMap<String, String[]> hashMap = new HashMap<>();
-        hashMap.put("1", teste);
-        hashMap.put("2", teste);
+        HashMap<Integer, String[]> hashMap = new HashMap<>();
+        hashMap.put(1, teste1);
+        hashMap.put(2, teste2);
         //hashMap.put("3", teste1);
         
-        HashMap<String, Object> retorno = JsonUtils.getFieldsWithTypeValueString(hashMap);
-        assertEquals("{1={\"teste\":\"teste1\"}, 2={\"teste\":\"teste1\"}}",  retorno.toString());
+        Map<Integer, Object> retorno = JsonUtils.getFieldsWithTypeValueString(hashMap);
+        assertEquals("{1={\"teste1\":\"teste11\"}, 2={\"teste2\":\"teste22\"}}",  retorno.toString());
     }
     
     
     @Test
     void shouldPassGetFieldsWithTypeValueStringWithOneField() {
         String[] teste = {"teste", "teste1"};
-        HashMap<String, String[]> hashMap = new HashMap<>();
-        hashMap.put("1", teste);
+        HashMap<Integer, String[]> hashMap = new HashMap<>();
+        hashMap.put(1, teste);
         
-        HashMap<String, Object> retorno = JsonUtils.getFieldsWithTypeValueString(hashMap);
+        Map<Integer, Object> retorno = JsonUtils.getFieldsWithTypeValueString(hashMap);
         assertEquals("{1={\"teste\":\"teste1\"}}", retorno.toString());
     }
     

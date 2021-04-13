@@ -10,18 +10,18 @@ import org.springframework.context.annotation.Configuration;
 import br.com.luzialabs.desafio.agenda.constants.Constants;
 
 /** This Class is the Core of all microservices. It is an abstract Class
- * @author Gabriel Lima
+ * @author 
  *
  */
 @SpringBootApplication(scanBasePackages = { "br.com.luzialabs.desafio.agenda" })
 @Configuration
-public abstract class AgendaSettings {
+public interface AgendaSettings {
 	
 	/** This methods sets the default TimeZone for all microservices
 	 *
 	 */
     @PostConstruct
-    public void init(){
+    public default void init(){
         TimeZone.setDefault(TimeZone.getTimeZone(Constants.TIME_ZONE_ID));
     }
 }

@@ -11,8 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import br.com.luzialabs.desafio.agenda.enums.ErrorType;
-import br.com.luzialabs.desafio.agenda.enums.SuccessMessage;
+import br.com.luzialabs.desafio.agenda.enums.ErrorTypeEnum;
+import br.com.luzialabs.desafio.agenda.enums.SuccessMessageEnum;
 import br.com.luzialabs.desafio.agenda.utils.JsonUtils;
 import br.com.luzialabs.desafio.agenda.utils.Utils;
 
@@ -22,7 +22,7 @@ public class ApiResponse {
 	HttpServletRequest request;
 	
 	@JsonInclude(Include.NON_NULL)
-	private ErrorType errorType;
+	private ErrorTypeEnum errorType;
 
 	@JsonInclude(Include.NON_NULL)
 	private HttpStatus httpStatus;
@@ -40,7 +40,7 @@ public class ApiResponse {
 	private String path;
 	
 	@JsonInclude(Include.NON_NULL)
-	private SuccessMessage successMessage;
+	private SuccessMessageEnum successMessage;
 	
     @JsonInclude(Include.NON_NULL)
     private Integer code;
@@ -65,14 +65,14 @@ public class ApiResponse {
     
 	public ApiResponse() {}
 	
-	public ApiResponse(ErrorType errorType) {
+	public ApiResponse(ErrorTypeEnum errorType) {
 		this.requestId = Utils.generateId();
         this.code = errorType.getCode();
         this.messageDetail = errorType.getDesc();
         this.apiReferences = new HttpStatusReference("related", referenceAddress);
     }
 	
-	public ApiResponse(SuccessMessage successMessage) {
+	public ApiResponse(SuccessMessageEnum successMessage) {
 		this.requestId = Utils.generateId();
         this.code = successMessage.getCode();
         this.messageDetail = successMessage.getDesc();
@@ -87,11 +87,11 @@ public class ApiResponse {
         this.request = request;
     }
 
-    public ErrorType getErrorType() {
+    public ErrorTypeEnum getErrorType() {
         return errorType;
     }
 
-    public void setErrorType(ErrorType errorType) {
+    public void setErrorType(ErrorTypeEnum errorType) {
         this.errorType = errorType;
     }
 
@@ -135,11 +135,11 @@ public class ApiResponse {
         this.path = path;
     }
 
-    public SuccessMessage getSuccessMessage() {
+    public SuccessMessageEnum getSuccessMessage() {
         return successMessage;
     }
 
-    public void setSuccessMessage(SuccessMessage successMessage) {
+    public void setSuccessMessage(SuccessMessageEnum successMessage) {
         this.successMessage = successMessage;
     }
 

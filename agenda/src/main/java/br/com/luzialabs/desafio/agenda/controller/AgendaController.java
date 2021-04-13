@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,11 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.luzialabs.desafio.agenda.business.AgendaBusiness;
 import br.com.luzialabs.desafio.agenda.dto.AgendaDTO;
-import br.com.luzialabs.desafio.agenda.enums.RemocaoTipoEnum;
-import br.com.luzialabs.desafio.agenda.enums.StatusEnvioEnum;
 import br.com.luzialabs.desafio.agenda.http.AgendaApiResponse;
-import br.com.luzialabs.desafio.agenda.model.AgendaModel;
-import br.com.luzialabs.desafio.agenda.utils.JsonUtils;
 
 @RestController
 public class AgendaController{
@@ -33,17 +28,14 @@ public class AgendaController{
 	AgendaBusiness agendaBusiness;
 	
 	@PostMapping(value = "/api/v1/agenda", produces = { "application/json;charset=utf-8" })
-	public ResponseEntity<Object> agendaSave(@RequestBody AgendaModel agendaModel, 
+	public ResponseEntity<Object> agendaSave(@RequestBody AgendaDTO agendaDTO, 
 	                                         HttpServletRequest request, 
 	                                         HttpServletResponse response) {
-	    LOGGER.info("Entrando no agendaSave = {} ", agendaModel.getId());
+	    String msg = agendaDTO.toString();  
+	    LOGGER.info("Entrando no agendaSave = Destinatario: {} - Data Hora {}", agendaDTO.getDestinatario(), agendaDTO.getDataHora());
+	    LOGGER.info("json: {}", msg);
 	    
-	    LOGGER.info("json: " + JsonUtils.parseToJsonString(agendaModel));
-	    LOGGER.info("Validado email: " + agendaModel.getDestinatario().replaceAll("(?<=.{3}).(?=.*@)", "*"));
-	    
-	    agendaModel.setStatusEnvio(StatusEnvioEnum.RECEBIDO.getDesc());
-	    
-	    AgendaApiResponse apiResponse = agendaBusiness.saveAgenda(agendaModel);    
+	    AgendaApiResponse apiResponse = agendaBusiness.saveAgenda(agendaDTO);    
         
 	    LOGGER.info("apiResponse agendaSave = {} ", apiResponse.getMessage());
         
@@ -62,7 +54,7 @@ public class AgendaController{
                                              HttpServletRequest request, 
                                              HttpServletResponse response) {
         
-	    LOGGER.info("Entrando no agendaFind = {} ", startDate + " - " + endDate);
+	    LOGGER.info("Entrando no agendaFind = {} - {}", startDate, endDate);
 	    
 	    AgendaDTO agendaDTO = new AgendaDTO();
 	    

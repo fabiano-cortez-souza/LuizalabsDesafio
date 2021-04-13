@@ -9,12 +9,15 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import br.com.luzialabs.desafio.agenda.base.ParseObjToJsonString;
 import br.com.luzialabs.desafio.agenda.constants.Constants;
+import br.com.luzialabs.desafio.agenda.enums.ComunicacaoTipoEnum;
+import br.com.luzialabs.desafio.agenda.enums.StatusEnvioEnum;
 
 @Entity
 @Table(name = "Agenda")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class AgendaModel {
+public class AgendaModel extends ParseObjToJsonString {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,10 +41,16 @@ public class AgendaModel {
     public AgendaModel() {
     }
 
-    public AgendaModel(String datahora, String destinatario, String mensagem) {
+    public AgendaModel(String datahora, 
+                       String destinatario, 
+                       String mensagem, 
+                       ComunicacaoTipoEnum comunicacaoTipoEnum,
+                       StatusEnvioEnum statusEnvioEnum) {
         this.dataHora = datahora; 
         this.destinatario = destinatario;
         this.mensagem = mensagem;
+        this.comunicacaoTipo = comunicacaoTipoEnum.getDesc();
+        this.statusEnvio = statusEnvioEnum.getDesc();
     }
 
     public long getId() {

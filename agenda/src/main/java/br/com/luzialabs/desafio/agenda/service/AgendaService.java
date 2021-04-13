@@ -1,13 +1,10 @@
 package br.com.luzialabs.desafio.agenda.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.mapping.Array;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.luzialabs.desafio.agenda.http.HttpRequest;

@@ -26,33 +26,36 @@
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
  
         <sonar.exclusions>
-            /src/main/java/br/com/luzialabs/desafio/agenda/abstractions/kafka/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/connector/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/Agenda*
+            /src/main/java/br/com/luzialabs/desafio/agenda/base/*            
             /src/main/java/br/com/luzialabs/desafio/agenda/constants/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/domain/kafka/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,                        
             /src/main/java/br/com/luzialabs/desafio/agenda/enums/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/exceptions/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/log/kafka/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,  
+            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,                                  
+            /src/main/java/br/com/luzialabs/desafio/agenda/service/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/vo/*
         </sonar.exclusions>
         <sonar.coverage.exclusions>
-            /src/main/java/br/com/luzialabs/desafio/agenda/abstractions/kafka/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/connector/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/Agenda*
+            /src/main/java/br/com/luzialabs/desafio/agenda/base/*            
             /src/main/java/br/com/luzialabs/desafio/agenda/constants/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/domain/kafka/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,                        
             /src/main/java/br/com/luzialabs/desafio/agenda/enums/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/exceptions/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/log/kafka/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/vo/*
+            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,  
+            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,                                  
+            /src/main/java/br/com/luzialabs/desafio/agenda/service/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/vo/*       
         </sonar.coverage.exclusions>
         <sonar.cpd.exclusions>
-            /src/main/java/br/com/luzialabs/desafio/agenda/abstractions/kafka/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/connector/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/Agenda*
+            /src/main/java/br/com/luzialabs/desafio/agenda/base/*            
             /src/main/java/br/com/luzialabs/desafio/agenda/constants/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/domain/kafka/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,                        
             /src/main/java/br/com/luzialabs/desafio/agenda/enums/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/exceptions/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/log/kafka/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,  
+            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,                                  
+            /src/main/java/br/com/luzialabs/desafio/agenda/service/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/vo/*
         </sonar.cpd.exclusions>
     </properties>    

@@ -9,13 +9,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import br.com.luzialabs.desafio.agenda.enums.ErrorType;
+import br.com.luzialabs.desafio.agenda.enums.ErrorTypeEnum;
 
 @Component
 public class HttpRequest {
@@ -24,8 +26,8 @@ public class HttpRequest {
 	private int responseCode;
 	private URL url; 
 	
-	public String sendPostRequest(Object payload, String address, String content_type) throws IOException {
-		Map<String, String> headers = prepareRestHeaders(content_type);
+	public String sendPostRequest(Object payload, String address, String contentType) throws IOException {
+		Map<String, String> headers = prepareRestHeaders(contentType);
 
 		String body = payload.toString();
 		
@@ -37,10 +39,15 @@ public class HttpRequest {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("POST");
 			con.setConnectTimeout(60000);
-	
-			headers.forEach((key, value) -> con.setRequestProperty(key, value));
+			
+            for (Entry<String, String> entry : headers.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                con.setRequestProperty(key, value);
+            }
+			
 			con.setDoOutput(true);
-			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
+			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream(), StandardCharsets.UTF_8);
 	
 			wr.write(body);
 			wr.flush();
@@ -48,7 +55,7 @@ public class HttpRequest {
 			this.responseCode = con.getResponseCode();
 			return getResponseBody(con);
 		} catch(SocketTimeoutException socketTimeoutException) {
-			return new ApiResponse(ErrorType.HTTP_CLIENT_TIMEOUT).toString();
+			return new ApiResponse(ErrorTypeEnum.HTTP_CLIENT_TIMEOUT).toString();
 		}
 	}
 	
@@ -78,9 +85,9 @@ public class HttpRequest {
 	}
 
 	
-	public Map<String, String> prepareRestHeaders(String content_type){
+	public Map<String, String> prepareRestHeaders(String contentType){
 		Map<String, String> headers = new HashMap<>();
-		headers.put("Content-type", content_type);
+		headers.put("Content-type", contentType);
 		return headers;
 	}
 	

@@ -5,10 +5,16 @@ import java.math.BigInteger;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class Utils {
+    
+    private Utils() {
+        throw new IllegalStateException("Utility class");
+    }    
 
 	public static String generateId() {
 		return UUID.randomUUID().toString();
@@ -22,6 +28,14 @@ public class Utils {
 		return charSequence.matches("^[\\-\\+]?[0-9]+");
 	}
 
+    public static boolean mailIsValid(String email) {
+        final Pattern validEmailAddressRegex = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+                Pattern.CASE_INSENSITIVE);
+
+        Matcher matcher = validEmailAddressRegex.matcher(email);
+        return matcher.find();
+    }
+    
 	public static boolean fieldOutOfRange(String value) {
 		return new BigInteger(value).compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0
 				|| new BigInteger(value).compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0;
@@ -73,7 +87,7 @@ public class Utils {
 	}
 
 	public static boolean anyRequiredFieldIsNullOrEmpty(List<String> fields) {
-		if(fields.size() == 0) {
+		if(fields.isEmpty()) {
 			return true;
 		}		
 		for (String field : fields) {
@@ -85,7 +99,7 @@ public class Utils {
 	}
 
 	public static boolean anyTimeStampFieldIsInvalid(List<String> fields) {
-		if(fields.size() == 0) {
+		if(fields.isEmpty()) {
 			return true;
 		}
 		
@@ -98,7 +112,7 @@ public class Utils {
 	}
 
 	public static boolean anyNumericFieldIsInvalid(List<String> fields) {
-		if (fields.size() == 0) {
+		if (fields.isEmpty()) {
 			return true;
 		}		
 		for (String field : fields) {
@@ -110,7 +124,7 @@ public class Utils {
 	}
 
 	public static boolean anyDoubleFieldIsInvalid(List<String> fields) {
-		if (fields.size() == 0) {
+		if (fields.isEmpty()) {
 			return true;
 		}
 		for (String field : fields) {

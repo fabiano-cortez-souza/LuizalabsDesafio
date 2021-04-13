@@ -11,5 +11,9 @@ public final class Constants {
     public static final int MAX_PAGE_LENGTH = 100;
     public static final int MAX_REPROCESS_TRY_VALUE = 3;
     public static final int MAX_LENGTH_MESSAGE = 4096;
-  
+
+    private Constants() {
+        throw new IllegalStateException("Utility class");
+    }
+
 }
