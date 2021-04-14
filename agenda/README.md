@@ -20,6 +20,7 @@ Sem entrar em detalhes do como, segue ações realizadas para a preparação do 
 Instalação do java 11;
 Instalação do Yatta/Eclipse - profile: clean-code-sts;
 Instalação e configuração do Mavem;
+Instalação do DBEAVER para acesso ao Bando de Dados;
 Instalação do Postman (com colection disponivel em \src\main\resources\infra\Postman\LuizaLabs.postman_collection.json);
 Instalação do Git (Git Bash e sourcetree) e customização de aliases.
 Instalação do docker windows (Mais detalhes em arquivos readme em \src\main\resources\infra):
@@ -29,6 +30,10 @@ Criação da branch master no github;
   - Clone desta branch para maquina local
 Criação de projeto "Spring Starter Project", agregando os modulos basicos:
   - Aproveitamento de estruturas e classes de projeto em que já atuei, com as costumizações inerentes ao desafio LuizaLabs 
+
+Em relação a boas praticas TDD, BDD ou DDD
+  padroes de projeto(design patterns java)
+Como o framework Spring já esta aderente a varios padroes de projeto, pelo container Spring, seu uso já implica automaticamente no uso de varias boas praticas no desenvolvimento java, por conta da Inversão de Controle e Injeção de Dependências
 
 # Comandos Mavem para build:
 Ir ao diretório que contem o arquivo pom.xml.
