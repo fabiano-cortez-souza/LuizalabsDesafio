@@ -52,45 +52,45 @@ public class AgendaBusiness {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(AgendaBusiness.class);
 	
-	public AgendaApiResponse saveAgenda(AgendaDTO agendaDTO) {
-	    
-	    AgendaModel agenda = new AgendaModel(agendaDTO.getDataHora(),
-	                                         agendaDTO.getDestinatario(),
-	                                         agendaDTO.getMensagem(),
-	                                         ComunicacaoTipoEnum.valueOf(agendaDTO.getComunicacaoTipo()),
-	                                         StatusEnvioEnum.RECEBIDO);
+    public AgendaApiResponse saveAgenda(AgendaDTO agendaDTO) {
+
+        AgendaModel agenda = new AgendaModel(agendaDTO.getDataHora(), agendaDTO.getDestinatario(),
+                agendaDTO.getMensagem(), ComunicacaoTipoEnum.valueOf(agendaDTO.getComunicacaoTipo()),
+                StatusEnvioEnum.RECEBIDO);
 
         AgendaApiResponse api = fieldValidationSave(agenda);
 
         String httpResponseBody = "";
-    
+
         if (api == null) {
-            agendaService.save(agenda);
+            if (agendaService.save(agenda)) {
 
-            /*
-             * Envio da mensagem pelo endpoint identiticado 
-             */
-            try {
-                httpResponseBody = agendaService.envioPostRequest(agenda.toString(), 
-                                                                  httpAddress,
-                                                                  MediaType.APPLICATION_JSON_VALUE);
+                /*
+                 * Envio da mensagem pelo endpoint identiticado
+                 */
+                try {
+                    httpResponseBody = agendaService.envioPostRequest(agenda.toString(), httpAddress,
+                            MediaType.APPLICATION_JSON_VALUE);
 
-                if (agendaService.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    agenda.setStatusEnvio(StatusEnvioEnum.ENVIADO.getDesc());
+                    if (agendaService.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        agenda.setStatusEnvio(StatusEnvioEnum.ENVIADO.getDesc());
+                        agendaService.save(agenda);
+                        api = new AgendaApiResponse(SuccessMessageEnum.AGENDA_SUCCESS);
+                    } else {
+                        api = JsonUtils.getGson().fromJson(httpResponseBody, AgendaApiResponse.class);
+                    }
+
+                } catch (Exception exception) {
+                    LOGGER.info(
+                            "[saveAgenda] START_Exception_FAILED HTTPRESPONSEBODY = {}"
+                                    + " APIRESPONSE = {} EXCEPTION = {} END_Exception_FAILED",
+                            httpResponseBody, api, exception.getMessage());
+                    agenda.setStatusEnvio(StatusEnvioEnum.NAO_ENVIADO.getDesc());
                     agendaService.save(agenda);
-                    api = new AgendaApiResponse(SuccessMessageEnum.AGENDA_SUCCESS);
-                } else {
-                    api = JsonUtils.getGson().fromJson(httpResponseBody, AgendaApiResponse.class);
+                    api = new AgendaApiResponse(ErrorTypeEnum.HTTP_RESPONSE_SEND_DENIED);
                 }
-            } catch (Exception exception) {
-                LOGGER.info("[saveAgenda] START_Exception_FAILED HTTPRESPONSEBODY = {}" + 
-                            " APIRESPONSE = {} EXCEPTION = {} END_Exception_FAILED",
-                            httpResponseBody, 
-                            api, 
-                            exception.getMessage());
-                agenda.setStatusEnvio(StatusEnvioEnum.NAO_ENVIADO.getDesc());
-                agendaService.save(agenda);
-                api = new AgendaApiResponse(ErrorTypeEnum.HTTP_RESPONSE_SEND_DENIED);
+            } else {
+                api = new AgendaApiResponse(ErrorTypeEnum.DOCUMENT_NOT_WRITE_IN_DB);
             }
         }
         return api;
@@ -155,18 +155,13 @@ public class AgendaBusiness {
 
             try {
                 parseDateToTimestamp(agendaDTO);
-
-                List<AgendaModel> listagenda = agendaService.findAgendaById(agendaDTO.getRequestId());
-
-                List<AgendaModel> listagendas = agendaService.getAgendaByDataHora(agendaDTO.getStartDate(),
-                        agendaDTO.getEndDate());
                 
                 switch (agendaDTO.getRemocaoTipoEnum()) {
                 case BY_ID:
-                    remocaoUnitaria(listagenda);
+                    remocaoUnitaria(agendaService.findAgendaById(agendaDTO.getRequestId()));
                     break;
                 case BY_DATE:
-                    remocaoPorDatas(listagendas);
+                    remocaoPorDatas(agendaService.getAgendaByDataHora(agendaDTO.getStartDate(),agendaDTO.getEndDate()));
                     break;
                 default:
                     return new AgendaApiResponse(ErrorTypeEnum.FIELD_VALIDATION_TYPE_DELETE_INVALID);
@@ -198,12 +193,14 @@ public class AgendaBusiness {
         int numRecord = Integer.parseInt(agendaDTO.getNumRecord());
 
         AgendaApiResponse apiResponse = fieldValidationFind(agendaDTO);
+        agendaDTO.setNumPage(Integer.toString(numPage));
+        agendaDTO.setNumRecord(Integer.toString(numRecord));
 
-        if (apiResponse == null) {
-            apiResponse = processaBuscaPorData(agendaDTO, numPage, numRecord);
+        if (apiResponse != null) {
+            return apiResponse ;
         }
         
-        return apiResponse;
+        return processaBuscaPorData(agendaDTO);
     }
 
     public AgendaApiResponse fieldValidationFind(AgendaDTO agendaDTO) {
@@ -277,10 +274,12 @@ public class AgendaBusiness {
         return apiResponse;
     }
     
-    private AgendaApiResponse processaBuscaPorData(AgendaDTO agendaDTO, int numPage, int numRecord) {
+    public AgendaApiResponse processaBuscaPorData(AgendaDTO agendaDTO) {
         List<AgendaModel> agendaList = new ArrayList<>();
         List<AgendaVO> listAgendaVO = new ArrayList<>();
         AgendaApiResponse apiResponse = null;
+        int numRecord = Integer.parseInt(agendaDTO.getNumRecord());
+        int numPage   = Integer.parseInt(agendaDTO.getNumPage());
 
         if (!jUnitTest) {
             agendaList = agendaService.getAgendaByDataHora(agendaDTO.getStartDate(), agendaDTO.getEndDate());
@@ -315,14 +314,14 @@ public class AgendaBusiness {
 
         return apiResponse;
     }
-    
-    public AgendaService getTransactionHistoryService() {
+
+    public AgendaService getAgendaService() {
         return agendaService;
     }
-  
-	public void setTransactionHistoryService(AgendaService agendaService) {
-		this.agendaService = agendaService;
-	}
+
+    public void setAgendaService(AgendaService agendaService) {
+        this.agendaService = agendaService;
+    }
 
     public boolean isjUnitTest() {
         return jUnitTest;

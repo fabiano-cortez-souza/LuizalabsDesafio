@@ -98,4 +98,26 @@ public class AgendaController{
         
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+	
+    @GetMapping(value = "/healthy", produces = { "application/json; charset=utf-8"})
+    public ResponseEntity<AgendaApiResponse> agendaHealthy(HttpServletRequest request, 
+                                                           HttpServletResponse response) {
+        
+        AgendaApiResponse apiResponse = new AgendaApiResponse();
+        apiResponse.setHttpCode(HttpStatus.OK.value());
+        apiResponse.setMessage("Healthy successfull");
+        apiResponse.setCode(HttpStatus.OK.value());
+        
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+        
+    }
+
+    public AgendaBusiness getAgendaBusiness() {
+        return agendaBusiness;
+    }
+
+    public void setAgendaBusiness(AgendaBusiness agendaBusiness) {
+        this.agendaBusiness = agendaBusiness;
+    }
+	
 }

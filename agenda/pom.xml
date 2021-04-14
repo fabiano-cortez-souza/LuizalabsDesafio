@@ -1,110 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>br.com.luzialabs</groupId>
-	<artifactId>agenda</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>agenda</name>
-	<description>Desafio Luzia Labs - Microserviços</description>
-	
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.4.4</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>br.com.luzialabs</groupId>
+    <artifactId>agenda</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>agenda</name>
+    <description>Desafio Luzia Labs - Microserviços</description>
+
     <properties>
-        <preAssembleDir>${project.build.directory}/appassembler-preassemble</preAssembleDir>    
+        <preAssembleDir>${project.build.directory}/appassembler-preassemble</preAssembleDir>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.a>${java.version}</maven.compiler.a>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.repackage.skip>false</spring-boot.repackage.skip>
-        <docker.image.prefix>agenda</docker.image.prefix>    
+        <docker.image.prefix>agenda</docker.image.prefix>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
- 
+
         <sonar.exclusions>
             /src/main/java/br/com/luzialabs/desafio/agenda/Agenda*
-            /src/main/java/br/com/luzialabs/desafio/agenda/base/*            
+            /src/main/java/br/com/luzialabs/desafio/agenda/base/*
             /src/main/java/br/com/luzialabs/desafio/agenda/constants/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,                        
+            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/enums/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,  
-            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,                                  
+            /src/main/java/br/com/luzialabs/desafio/agenda/http/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/service/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/vo/*
         </sonar.exclusions>
         <sonar.coverage.exclusions>
             /src/main/java/br/com/luzialabs/desafio/agenda/Agenda*
-            /src/main/java/br/com/luzialabs/desafio/agenda/base/*            
+            /src/main/java/br/com/luzialabs/desafio/agenda/base/*
             /src/main/java/br/com/luzialabs/desafio/agenda/constants/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,                        
+            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/enums/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,  
-            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,                                  
+            /src/main/java/br/com/luzialabs/desafio/agenda/http/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/service/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/vo/*       
+            /src/main/java/br/com/luzialabs/desafio/agenda/vo/*
         </sonar.coverage.exclusions>
         <sonar.cpd.exclusions>
             /src/main/java/br/com/luzialabs/desafio/agenda/Agenda*
-            /src/main/java/br/com/luzialabs/desafio/agenda/base/*            
+            /src/main/java/br/com/luzialabs/desafio/agenda/base/*
             /src/main/java/br/com/luzialabs/desafio/agenda/constants/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,                        
+            /src/main/java/br/com/luzialabs/desafio/agenda/dto/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/enums/*,
-            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,  
-            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,                                  
+            /src/main/java/br/com/luzialabs/desafio/agenda/http/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/model/*,
+            /src/main/java/br/com/luzialabs/desafio/agenda/repository/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/service/*,
             /src/main/java/br/com/luzialabs/desafio/agenda/vo/*
         </sonar.cpd.exclusions>
-    </properties>    
-    
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-integration</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-http</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-jpa</artifactId>
-		</dependency>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-integration</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-jpa</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -119,25 +134,25 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            </dependency>
+        </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>
             <version>2.0.0-beta.5</version>
             <scope>test</scope>
-        </dependency>    
-<!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
-<dependency>
-    <groupId>org.powermock</groupId>
-    <artifactId>powermock-module-junit4</artifactId>
-    <version>2.0.9</version>
-    <scope>test</scope>
-</dependency>           
-	</dependencies>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.powermock/powermock-module-junit4 -->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>2.0.9</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <pluginManagement>
@@ -157,7 +172,7 @@
                                 <outputDirectory>target</outputDirectory>
                                 <overwrite>true</overwrite>
                                 <resources>
-                                    <resource> 
+                                    <resource>
                                         <directory>../agenda/src/main/resources/</directory>
                                         <filtering>true</filtering>
                                         <includes>
@@ -268,5 +283,34 @@
             </plugin>
         </plugins>
     </reporting>
-
+    <profiles>
+        <profile>
+            <id>coverage</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -72,6 +72,7 @@ class JsonUtilsTest {
 		String json = JsonUtils.mapToJson(fatherWithChildren);
 		String xml = JsonUtils.jsonToXML(json);
 		LOGGER.info("XML: {}", xml);
+		assertEquals("<father><field1>value</field1><field2>value</field2></father>", xml);
 	}
 	
 	@Test

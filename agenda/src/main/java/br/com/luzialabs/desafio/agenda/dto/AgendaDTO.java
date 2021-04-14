@@ -37,6 +37,20 @@ public class AgendaDTO extends ParseObjToJsonString {
     @Column(name = "remocaoTipoEnum")
     private RemocaoTipoEnum remocaoTipoEnum;
 
+    public AgendaDTO() {};
+    
+    public AgendaDTO(String dataHora, String destinatario, String mensagem, String comunicacaoTipo) {
+        super();
+        this.dataHora = dataHora;
+        this.destinatario = destinatario;
+        this.mensagem = mensagem;
+        this.comunicacaoTipo = comunicacaoTipo;
+    }
+
+    public AgendaDTO(String string, String string2, String string3, String desc, String desc2) {
+        // TODO Auto-generated constructor stub
+    }
+
     public String getDataHora() {
         return dataHora;
     }

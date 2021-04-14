@@ -47,7 +47,8 @@ Docker VM Linux:
 cmd: mvn -Dsonar.host.url=http://192.168.99.102:9000 sonar:sonar
 
 Docker Windows:
-cmd: mvn -Dsonar.host.url=http://localhost:9000 sonar:sonar -Dsonar.login=admin -Dsonar.password=admin123
+cmd: mvn verify -Dsonar.host.url=http://localhost:9000 sonar:sonar -Dsonar.login=admin -Dsonar.password=admin123
+
 
 ==========================================================================================
 == Visualizar o report Sonar

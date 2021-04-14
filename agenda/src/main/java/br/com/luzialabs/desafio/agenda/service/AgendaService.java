@@ -28,9 +28,9 @@ public class AgendaService extends HttpRequest {
         return response;
     }
 
-    public boolean save(AgendaModel transactionHistoryDocument) {
+    public boolean save(AgendaModel agendaDocument) {
         try {
-            agendaRepository.save(transactionHistoryDocument);
+            agendaRepository.save(agendaDocument);
             return true;
         } catch (Exception e) {
             return false;
